@@ -1,5 +1,5 @@
 export default function SignIn() {
   return (
-    <div>SignIn</div>
+    <button className="btn btn-lg">Button</button>
   )
 }
