@@ -1,11 +1,9 @@
-import { Route, Routes } from 'react-router-dom'
-import './App.css'
-import SignUp from './pages/SignUp'
+import { Outlet } from 'react-router-dom'
 
 function App() {
   return (
     <div className="App">
-     <Routes><Route path="/authentication/sign-up" element={<SignUp />} /></Routes>
+      <Outlet/>
     </div>
   )
 }
