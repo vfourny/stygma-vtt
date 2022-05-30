@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuthContext } from '../../contexts/UserContext'
+import { AuthError, UserRegex } from '../../types/error'
 
 type SignUpFormType = {
 	email: string
@@ -13,66 +14,69 @@ export default function SignUpForm() {
 	const navigate = useNavigate()
 	const { signUp } = useContext(UserAuthContext)
 
-	const { register, handleSubmit, watch } = useForm<SignUpFormType>({
+	const { register, handleSubmit, getValues, formState: { errors } } = useForm<SignUpFormType>({
 		mode: 'onTouched',
 	})
 
-	const onSubmit = (data: SignUpFormType) => {
+	const onSubmit = handleSubmit(data =>
 		signUp(data.email, data.password)
 			.then(() => {
+				console.log(1)
 				navigate('/parties/')
 			})
-			.catch((_err) => {})
-	}
+			.catch((_err) => console.log(2))
+	) 
 
 	return (
-			<form  onSubmit={handleSubmit(onSubmit)}>
+			<form  onSubmit={onSubmit}>
 				<h5 >Inscription</h5>
 				<div>
 					<label htmlFor="email">
 						Email
 						<input
 							type="email"
-							id="email"
 							{...register('email', {
-								required: 'Vous devez renseigner un email',
-								pattern: { value: EMAIL_REGEX, message: 'Adresse email incorrecte' },
+								required: AuthError.REQUIRED_FIELD,
+								pattern: { value: new RegExp(UserRegex.EMAIL), message: 'Adresse email incorrecte' },
 							})}
-							placeholder="name@company.com"
+							placeholder="Email"
 							required
 						/>
+						{console.log(errors)}
 					</label>
+					
+				
 				</div>
 				<div>
 					<label htmlFor="password">
 						Mot de passe
 						<input
-							id="password"
 							type="password"
 							{...register('password', {
-								required: 'Vous devez renseigner un mot de passe',
+								required: AuthError.REQUIRED_FIELD,
 								maxLength: 30,
 								minLength: 6,
 							})}
+							placeholder="Mot de passe"
 							required
 						/>
 					</label>
 				</div>
 				<div>
 					<label htmlFor="passwordConfirm">
-						Mot de passe
+						Confirmation du mot de passe
 						<input
-							id="passwordConfirm"
 							type="password"
 							{...register('passwordConfirm', {
-								required: 'Vous devez renseigner un mot de passe',
+								required: AuthError.REQUIRED_FIELD,
 								validate: (val: string) => {
-									if (watch('password') !== val) {
-										return 'Les mots de passe ne sont pas identiques'
+									if (getValues('password') !== val) {
+										return AuthError.PASSWORD_NOT_MATCH
 									}
 									return undefined
 								},
 							})}
+							placeholder="Répéter"
 							required
 						/>
 					</label>
