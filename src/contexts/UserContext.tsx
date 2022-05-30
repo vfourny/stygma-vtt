@@ -10,29 +10,28 @@ type UserAuthContextType={
 	logOut: () => Promise<void>
 }
 
-type UserAuthContextProviderProps={
+type UserAuthProviderProps={
   children:JSX.Element
 }
 
-export const UserAuthContext = createContext<UserAuthContextType>()
+export const UserAuthContext = createContext<UserAuthContextType>({} as UserAuthContextType)
 
-export function UserAuthContextProvider(props:UserAuthContextProviderProps){
+export function UserAuthProvider(props:UserAuthProviderProps){
   const [user,setUser] = useState<User|null>(null)
-  const signUp=(email:string,password:string)=>{
-    return createUserWithEmailAndPassword(auth, email, password)
-  }
-
-  const signIn=(email:string,password:string)=>{
-    return signInWithEmailAndPassword(auth, email, password)
-  }
-
+  const signUp=(email:string,password:string)=> createUserWithEmailAndPassword(auth, email, password)
+  const signIn=(email:string,password:string)=> signInWithEmailAndPassword(auth, email, password)
   const  signInWithGoogle=()=>{
     const googleAuthProvider = new GoogleAuthProvider()
     return signInWithPopup(auth, googleAuthProvider)
   }
+  const logOut = ()=>signOut(auth)
 
-  const logOut = ()=>{
-    return signOut(auth)
+  const value:UserAuthContextType= {
+    user,
+    signIn,
+    signInWithGoogle,
+    signUp,
+    logOut
   }
 
   useEffect(()=>{
@@ -43,5 +42,5 @@ export function UserAuthContextProvider(props:UserAuthContextProviderProps){
     // Remove listener on unmount
     return ()=> unsubscribe()
   },[])
-  return <UserAuthContext.Provider value={{user,signUp,signIn,signInWithGoogle,logOut}}>{props.children}</UserAuthContext.Provider>
+  return <UserAuthContext.Provider value={value}>{props.children}</UserAuthContext.Provider>
 }
