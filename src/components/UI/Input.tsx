@@ -1,9 +1,15 @@
-type ButtonProps = {
-  type:"email" | "password" | "text"
-}
+import styled from 'styled-components'
 
-export default function Input({type}:ButtonProps) {
+type InputProps = {
+  type?:"email" | "password" | "text",
+  placeholder?:string
+}
+const InputStyled = styled.input`
+border: 1px solid red;
+`
+
+export default function Input({type="text"}:InputProps) {
   return (
-    <input type={type} />
+    <InputStyled type={type} />
   )
 }

@@ -1,16 +1,20 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import App from './App'
-import './assets/styles/index.css'
-import Auth from './pages/Auth/Auth'
-import SignIn from './pages/Auth/SignIn'
-import SignUp from './pages/Auth/SignUp'
-import Parties from './pages/Parties/Parties'
-import PartiesList from './pages/Parties/PartiesList'
-import Party from './pages/Parties/Party'
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+import './index.css';
+
+import React from 'react';
+import App from './App';
+import Auth from './pages/Auth/Auth';
+import SignIn from './pages/Auth/SignIn';
+import SignUp from './pages/Auth/SignUp';
+import Parties from './pages/Parties/Parties';
+import PartiesList from './pages/Parties/PartiesList';
+import Party from './pages/Parties/Party';
+
+const container = document.getElementById('root')
+const root = createRoot(container!)
+root.render(
   <React.StrictMode>  
  <BrowserRouter>
     <Routes>

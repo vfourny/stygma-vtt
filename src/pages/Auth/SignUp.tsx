@@ -33,14 +33,13 @@ export default function SignUpForm() {
 				<div>
 					<label htmlFor="email">
 						Email
-						<input
+						<Input
 							type="email"
 							{...register('email', {
 								required: AuthError.REQUIRED_FIELD,
 								pattern: { value: new RegExp(UserRegex.EMAIL), message: 'Adresse email incorrecte' },
 							})}
 							placeholder="Email"
-							required
 						/>
 						{console.log(errors)}
 					</label>
