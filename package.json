@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "postinstall": "cd ./functions && npm install",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",

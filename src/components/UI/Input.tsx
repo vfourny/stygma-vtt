@@ -2,8 +2,7 @@ import styled from 'styled-components'
 
 type InputProps = {
   type?:"email" | "password" | "text",
-  placeholder?:string,
-  register
+  placeholder?:string
 }
 const InputStyled = styled.input`
 border: 1px solid;

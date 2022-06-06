@@ -1,64 +1,72 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserAuthContext } from '../../contexts/UserContext'
+import { InferType, object, string } from "yup"
+import Button from '../../components/UI/Button'
+import { UserAuthContext } from '../../contexts/UserAuthContext'
+import { AuthError, USER_PASSWORD_REGEX } from '../../types/error'
 
-type SignInFormType = {
-	email: string
-	password: string
-	passwordConfirm: string
-}
+const signInSchema = object({
+	email:string().email(AuthError.FORMAT_EMAIL).required(AuthError.REQUIRED_FIELD),
+	password:string().matches(USER_PASSWORD_REGEX,AuthError.FORMAT_PASSWORD).required(AuthError.REQUIRED_FIELD),
+});
 
-export default function SignInForm() {
+type SignInFormType = InferType<typeof signInSchema>
+
+export default function SignIn() {
 	const navigate = useNavigate()
 	const { signIn } = useContext(UserAuthContext)
 
+	const { register, handleSubmit, formState: { errors } } = useForm<SignInFormType>({
+		mode: 'onTouched',
+		resolver: yupResolver(signInSchema)
+	})
 
-	const onSubmit = (data: SignInFormType) => {
+	const onSubmit = (data:SignInFormType) =>
 		signIn(data.email, data.password)
 			.then(() => {
 				navigate('/parties')
 			})
-			.catch((_err) => {})
-	}
-
+			.catch((err) => {
+				console.log(err)
+			})
+	
 	return (
-			<form onSubmit={handleSubmit(onSubmit)}>
-				<h5 >Connectez-vous</h5>
+			<form  onSubmit={handleSubmit(onSubmit)}>
+				<h5 >Inscription</h5>
 				<div>
-					<label htmlFor="email" >
+					<label htmlFor="email">
 						Email
 						<input
 							type="email"
-							id="email"
-							placeholder="name@company.com"
-							required
+							{...register('email')}
+							placeholder="Email"
 						/>
+						<p>{errors.email?.message}</p>
 					</label>
+					
+				
 				</div>
 				<div>
-					<label htmlFor="password" >
+					<label htmlFor="password">
 						Mot de passe
 						<input
-							id="password"
 							type="password"
-							required
+							{...register('password')}
+							placeholder="Mot de passe"
 						/>
+						<p>{errors.password?.message}</p>
 					</label>
 				</div>
-				<div>
-					<a >
-						Mot de passe oublié ?
-					</a>
-				</div>
-				<button
+				<Button
 					type="submit"
-				>
-					Connexion
-				</button>
-				<div>
-					Pas encore inscrit ? {}
-					<Link to="/authentication/sign-up" >
-						Créer un compte
+					label="Connexion"
+				/>
+				<div >
+					Vous n'avez pas encore de compte? {}
+					<Link to="/auth/sign-up">
+						Créer en un
 					</Link>
 				</div>
 			</form>

@@ -1,43 +1,56 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
-import { InferType, object, string } from "yup"
+import { Link, useNavigate } from 'react-router-dom'
+import { InferType, object, ref, string } from "yup"
 import Button from '../../components/UI/Button'
-import { AuthError, UserRegex } from '../../types/error'
+import { UserAuthContext } from '../../contexts/UserAuthContext'
+import { AuthError, USER_PASSWORD_REGEX, USER_USERNAME_REGEX } from '../../types/error'
 
 const signUpSchema = object({
-  username: string().required(),
-	email:string().email().required(),
-	password:string().required(),
-	passwordConfirm:string().required(),
-}).required();
+  username: string().matches(USER_USERNAME_REGEX,AuthError.FORMAT_USERNAME).required(),
+	email:string().email(AuthError.FORMAT_EMAIL).required(AuthError.REQUIRED_FIELD),
+	password:string().matches(USER_PASSWORD_REGEX,AuthError.FORMAT_PASSWORD).required(AuthError.REQUIRED_FIELD),
+	confirmPassword:string().oneOf([ref('password')],AuthError.PASSWORD_NOT_MATCH).required(AuthError.REQUIRED_FIELD),
+});
 
 type SignUpFormType = InferType<typeof signUpSchema>
 
-export default function SignUpForm() {
-	const { register, handleSubmit, getValues, formState: { errors } } = useForm<SignUpFormType>({
+export default function SignUp() {
+	const navigate = useNavigate()
+	const { signUp,signInWithGoogle } = useContext(UserAuthContext)
+
+	const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormType>({
 		mode: 'onTouched',
 		resolver: yupResolver(signUpSchema)
 	})
 
-	const onSubmit = handleSubmit(data =>
-	console.log(data)
-	) 
+	const onSubmit = (data:SignUpFormType) =>
+		signUp(data.email, data.password)
+			.then(() => {
+				navigate('/verify')
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 
+	const onClick = ()=>{
+		signInWithGoogle().then(()=>navigate('/parties'))
+	}
+	
 	return (
-			<form  onSubmit={onSubmit}>
+			<form  onSubmit={handleSubmit(onSubmit)}>
 				<h5 >Inscription</h5>
 				<div>
-					{/* <label htmlFor="username">
-						Email
-						<Input
+					<label htmlFor="username">
+						Nom d'utilisateur
+						<input
 							type="text"
 							{...register('username')}
 							placeholder="Nom d'utilisateur"
 						/>
-						{console.log(errors)}
-					</label> */}
-					
+						<p>{errors.username?.message}</p>
+					</label>
 				
 				</div>
 				<div>
@@ -45,13 +58,10 @@ export default function SignUpForm() {
 						Email
 						<input
 							type="email"
-							{...register('email', {
-								required: AuthError.REQUIRED_FIELD,
-								pattern: { value: new RegExp(UserRegex.EMAIL), message: 'Adresse email incorrecte' },
-							})}
+							{...register('email')}
 							placeholder="Email"
 						/>
-						{console.log(errors)}
+						<p>{errors.email?.message}</p>
 					</label>
 					
 				
@@ -61,14 +71,10 @@ export default function SignUpForm() {
 						Mot de passe
 						<input
 							type="password"
-							{...register('password', {
-								required: AuthError.REQUIRED_FIELD,
-								maxLength: 30,
-								minLength: 6,
-							})}
+							{...register('password')}
 							placeholder="Mot de passe"
-							required
 						/>
+						<p>{errors.password?.message}</p>
 					</label>
 				</div>
 				<div>
@@ -76,24 +82,17 @@ export default function SignUpForm() {
 						Confirmation du mot de passe
 						<input
 							type="password"
-							{...register('passwordConfirm', {
-								required: AuthError.REQUIRED_FIELD,
-								validate: (val: string) => {
-									if (getValues('password') !== val) {
-										return AuthError.PASSWORD_NOT_MATCH
-									}
-									return undefined
-								},
-							})}
+							{...register('confirmPassword')}
 							placeholder="Répéter"
-							required
 						/>
+						<p>{errors.confirmPassword?.message}</p>
 					</label>
 				</div>
 				<Button
 					type="submit"
 					label="Créer un compte"
 				/>
+				<Button label="Connexion avec google" onClick={onClick}/>
 				<div >
 					Vous possédez déjà un compte ? {}
 					<Link to="/authentication/sign-in">

@@ -1,14 +1,43 @@
-import { useContext } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-import { UserAuthContext } from '../../contexts/UserContext'
+import { collection, getDocs } from 'firebase/firestore';
+import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { firestore } from '../../config/firebase';
+import { UserAuthContext } from '../../contexts/UserAuthContext';
 
-export default function Authentication() {
-	const { user } = useContext(UserAuthContext)
+type PartiesType = {
+	id: string
+	name: string
+}
 
-	if (!user) {
-		return <Navigate to="/auth/sign-in" />
-	}
-	return (
-			<Outlet />
-	)
+export default function Parties() {
+	const [parties, setParties] = useState<PartiesType[]>([])
+	const partiesCollectionRef = collection(firestore, 'parties')
+  const navigate = useNavigate()
+  const {logOut} = useContext(UserAuthContext)
+
+  const handleClick = ()=>{
+    logOut().then(()=>
+    navigate('/sign-in'))
+  }
+
+  useEffect(() => {
+		const getParties = async () => {
+			const data = await getDocs(partiesCollectionRef)
+			setParties(data.docs.map((doc) => ({ ...(doc.data() as PartiesType), id: doc.id })))
+		}
+		getParties()
+	})
+  
+  return (
+    <div>
+      <button onClick={handleClick}>Déconnexion</button>
+      <ul>
+				{parties.map((party) => (
+					<li>
+						<Link to={party.id}> {party.name}</Link>
+					</li>
+				))}
+			</ul>
+    </div>
+  )
 }
