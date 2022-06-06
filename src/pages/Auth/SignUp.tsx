@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button'
 import { UserAuthContext } from '../../contexts/UserAuthContext'
 import { AuthError, USER_PASSWORD_REGEX, USER_USERNAME_REGEX } from '../../types/error'
 
+// ranger avec les types
 const signUpSchema = object({
   username: string().matches(USER_USERNAME_REGEX,AuthError.FORMAT_USERNAME).required(),
 	email:string().email(AuthError.FORMAT_EMAIL).required(AuthError.REQUIRED_FIELD),
@@ -46,6 +47,7 @@ export default function SignUp() {
 						Nom d'utilisateur
 						<input
 							type="text"
+							// eviter les spread dans les props, add eslint rules
 							{...register('username')}
 							placeholder="Nom d'utilisateur"
 						/>

@@ -20,6 +20,7 @@ export const PartyContext = createContext<PartyContextType>({} as PartyContextTy
 
 export function PartyProvider(props:PartyProviderProps){
   const [party,setParty] = useState<any|null>(null)
+  // ajouter un isLoading
 
   const fetchParty = async (documentId:string)=>{
 	 let partyDocRef = doc(firestore, 'parties', documentId)

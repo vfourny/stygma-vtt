@@ -20,11 +20,14 @@ export default function Parties() {
     navigate('/sign-in'))
   }
 
-  useEffect(() => {
-		const getParties = async () => {
+	//intégrer le code de fetching db dans /services
+	const getParties = async () => {
 			const data = await getDocs(partiesCollectionRef)
 			setParties(data.docs.map((doc) => ({ ...(doc.data() as PartiesType), id: doc.id })))
 		}
+
+  useEffect(() => {
+		
 		getParties()
 	})
   

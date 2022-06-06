@@ -1,9 +1,8 @@
 import { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { PartyContext, PartyProvider } from '../../contexts/PartyContext';
+import { PartyContext } from '../../contexts/PartyContext';
 
-export default function Party() {
-
+const Party:React.FC = ()=> {
   const { partyId } = useParams();
   const {fetchParty} = useContext(PartyContext)
 
@@ -12,7 +11,8 @@ export default function Party() {
 	})
   
   return (
-    <PartyProvider >
-    <div>Party</div></PartyProvider>
+    <div>Party</div>
   )
 }
+
+export default Party
