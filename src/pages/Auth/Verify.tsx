@@ -1,5 +1,5 @@
 
-export default function Verify() {
+const Verify:React.FC =() =>{
   return (
     <div><h5>Vérification de mail nécessaire</h5> 
     <p> Afin d'activer votre compte nous devons vérifier votre mail. Vous devriez l'avoir reçu sur l'adresse mail
@@ -8,3 +8,5 @@ export default function Verify() {
         </div>
   )
 }
+
+export default Verify

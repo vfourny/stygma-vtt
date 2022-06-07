@@ -15,6 +15,7 @@ type UserAuthProviderProps={
   children:JSX.Element
 }
 
+// définir le contexte avec un object par défaut au lieu du as, en mettant les fonctions à vide
 export const UserAuthContext = createContext<UserAuthContextType>({} as UserAuthContextType)
 
 export function UserAuthProvider(props:UserAuthProviderProps){
@@ -22,8 +23,11 @@ export function UserAuthProvider(props:UserAuthProviderProps){
   const [isLoading,setIsLoading] = useState(true)
 
   // refaire les fcts firebase avec un retour promise et un throw error
+  // avant ça tester de mettre n'imp comme param pour voir ce que ça fait, ça se trouve pas besoin de try/catch
   const signUp=(email:string,password:string)=> createUserWithEmailAndPassword(auth, email, password)
+
   const signIn=(email:string,password:string)=> signInWithEmailAndPassword(auth, email, password)
+ 
   const  signInWithGoogle=()=>{
     const googleAuthProvider = new GoogleAuthProvider()
     return signInWithPopup(auth, googleAuthProvider)
@@ -32,7 +36,6 @@ export function UserAuthProvider(props:UserAuthProviderProps){
 
   const value:UserAuthContextType= {
     user,
-    isLoading,
     signIn,
     signInWithGoogle,
     signUp,
@@ -42,12 +45,11 @@ export function UserAuthProvider(props:UserAuthProviderProps){
   useEffect(()=>{
     // Listen  changes to the user's sign-in state.
     const unsubscribe = onAuthStateChanged(auth, (currentUser)=>{
-      console.log(currentUser)
       setUser(currentUser)
       setIsLoading(false)
     })
     // Remove listener on unmount
     return ()=> unsubscribe()
   },[])
-  return <UserAuthContext.Provider value={value}>{props.children}</UserAuthContext.Provider>
+  return <UserAuthContext.Provider value={value}>{!isLoading && props.children}</UserAuthContext.Provider>
 }

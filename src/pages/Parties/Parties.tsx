@@ -9,7 +9,7 @@ type PartiesType = {
 	name: string
 }
 
-export default function Parties() {
+const Parties:React.FC=()=> {
 	const [parties, setParties] = useState<PartiesType[]>([])
 	const partiesCollectionRef = collection(firestore, 'parties')
   const navigate = useNavigate()
@@ -44,3 +44,5 @@ export default function Parties() {
     </div>
   )
 }
+
+export default Parties

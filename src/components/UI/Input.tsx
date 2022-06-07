@@ -8,8 +8,10 @@ const InputStyled = styled.input`
 border: 1px solid;
 `
 
-export default function Input({type="text",name,placeholder}:InputProps) {
+const Input:React.FC<InputProps> = ({type="text",placeholder})=> {
   return (
-    <InputStyled type={type} name={name} placeholder={placeholder} />
+    <InputStyled type={type} placeholder={placeholder} />
   )
 }
+
+export default Input
