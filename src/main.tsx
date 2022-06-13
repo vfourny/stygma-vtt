@@ -5,7 +5,7 @@ import './index.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PartyProvider } from './contexts/PartyContext';
-import { UserAuthProvider } from './contexts/UserAuthContext';
+import { SessionProvider } from './contexts/SessionContext';
 import SecureRoute from './pages/Auth/SecureRoute';
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -18,7 +18,7 @@ const root = createRoot(container!)
 root.render(
   <React.StrictMode>  
      <BrowserRouter>
-      <UserAuthProvider>
+      <SessionProvider>
         <PartyProvider>
           <Routes>
             <Route path="/">
@@ -32,7 +32,7 @@ root.render(
             </Route>
           </Routes>
         </PartyProvider>
-      </UserAuthProvider>
+      </SessionProvider>
   </BrowserRouter>
   </React.StrictMode>
 )

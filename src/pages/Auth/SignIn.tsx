@@ -1,15 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import Button from '../../components/UI/Button'
-import { UserAuthContext } from '../../contexts/UserAuthContext'
+import { useSession } from '../../contexts/SessionContext'
 import { SignInFormType, SignInValidationSchema } from '../../types/auth'
 import { RoutesCompletePath } from '../../types/router'
 
 const SignIn:React.FC = () =>{
 	const navigate = useNavigate()
-	const { signIn } = useContext(UserAuthContext)
+	const { signIn } = useSession()
 
 	const { register, handleSubmit, formState: { errors } } = useForm<SignInFormType>({
 		mode: 'onTouched',

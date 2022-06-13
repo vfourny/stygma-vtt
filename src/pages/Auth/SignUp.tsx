@@ -1,15 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import Button from '../../components/UI/Button'
-import { UserAuthContext } from '../../contexts/UserAuthContext'
+import { useSession } from '../../contexts/SessionContext'
 import { SignUpFormType, SignUpValidationSchema } from '../../types/auth'
 import { RoutesCompletePath } from '../../types/router'
 
 const SignUp:React.FC = ()=> {
 	const navigate = useNavigate()
-	const { signUp,signInWithGoogle } = useContext(UserAuthContext)
+	const { signUp,signInWithGoogle } = useSession()
 
 	const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormType>({
 		mode: 'onTouched',
@@ -22,7 +21,7 @@ const SignUp:React.FC = ()=> {
 				navigate('/verify')
 			})
 			.catch((err) => {
-				console.log(err)
+				console.log(err.code)
 			})
 
 	const onClick = ()=>{

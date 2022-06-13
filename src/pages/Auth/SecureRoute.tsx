@@ -1,10 +1,9 @@
-import { useContext } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-import { UserAuthContext } from '../../contexts/UserAuthContext'
-import { RoutesCompletePath } from '../../types/router'
+import { Navigate, Outlet } from 'react-router-dom';
+import { useSession } from '../../contexts/SessionContext';
+import { RoutesCompletePath } from '../../types/router';
 
 const SecureRoute:React.FC = () =>{
-	const { user } = useContext(UserAuthContext)
+	const { user } = useSession()
 
 	if (!user) return <Navigate to={RoutesCompletePath.SIGN_IN} />
 	if(!user.emailVerified) return <Navigate to={RoutesCompletePath.VERIFY} />

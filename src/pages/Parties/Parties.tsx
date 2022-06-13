@@ -1,8 +1,8 @@
 import { collection, getDocs } from 'firebase/firestore';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { firestore } from '../../config/firebase';
-import { UserAuthContext } from '../../contexts/UserAuthContext';
+import { useSession } from '../../contexts/SessionContext';
 
 type PartiesType = {
 	id: string
@@ -13,7 +13,7 @@ const Parties:React.FC=()=> {
 	const [parties, setParties] = useState<PartiesType[]>([])
 	const partiesCollectionRef = collection(firestore, 'parties')
   const navigate = useNavigate()
-  const {logOut} = useContext(UserAuthContext)
+  const {logOut} = useSession()
 
   const handleClick = ()=>{
     logOut().then(()=>
