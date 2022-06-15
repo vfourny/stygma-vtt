@@ -76,6 +76,7 @@ export function SessionProvider(props: SessionProviderProps) {
 
   const logOut = async () => {
     try {
+      setIsLoadingUser(true);
       await signOut(auth);
     } catch (error: any) {
       setIsLoadingUser(false);

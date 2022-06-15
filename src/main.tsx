@@ -6,6 +6,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PartyProvider } from './contexts/PartyContext';
 import { SessionProvider } from './contexts/SessionContext';
+import Auth from './pages/Auth/Auth';
 import SecureRoute from './pages/Auth/SecureRoute';
 import SignIn from './pages/Auth/SignIn';
 import SignUp from './pages/Auth/SignUp';
@@ -22,9 +23,11 @@ root.render(
         <PartyProvider>
           <Routes>
             <Route path='/'>
-              <Route path='sign-in' element={<SignIn />} />
-              <Route path='sign-up' element={<SignUp />} />
-              <Route path='verify' element={<Verify />} />
+              <Route path='auth' element={<Auth />}>
+                <Route path='sign-in' element={<SignIn />} />
+                <Route path='sign-up' element={<SignUp />} />
+                <Route path='verify' element={<Verify />} />
+              </Route>
               <Route path='parties' element={<SecureRoute />}>
                 <Route index element={<Parties />} />
                 <Route path=':partyId' element={<Party />} />
