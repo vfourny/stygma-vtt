@@ -13,26 +13,26 @@ import Verify from './pages/Auth/Verify';
 import Parties from './pages/Parties/Parties';
 import Party from './pages/Parties/Party';
 
-const container = document.getElementById('root')
-const root = createRoot(container!)
+const container = document.getElementById('root');
+const root = createRoot(container!);
 root.render(
-  <React.StrictMode>  
-     <BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
       <SessionProvider>
         <PartyProvider>
           <Routes>
-            <Route path="/">
-              <Route path="sign-in" element={<SignIn />} />
-              <Route path="sign-up" element={<SignUp />} />
-              <Route path="verify" element={<Verify />} />
-              <Route path='parties' element={<SecureRoute/>}>
-                <Route index element={<Parties />}/>
-                <Route path=":partyId" element={<Party />} />
+            <Route path='/'>
+              <Route path='sign-in' element={<SignIn />} />
+              <Route path='sign-up' element={<SignUp />} />
+              <Route path='verify' element={<Verify />} />
+              <Route path='parties' element={<SecureRoute />}>
+                <Route index element={<Parties />} />
+                <Route path=':partyId' element={<Party />} />
               </Route>
             </Route>
           </Routes>
         </PartyProvider>
       </SessionProvider>
-  </BrowserRouter>
-  </React.StrictMode>
-)
+    </BrowserRouter>
+  </React.StrictMode>,
+);
