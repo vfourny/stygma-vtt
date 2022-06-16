@@ -1,11 +1,13 @@
-import { firestore } from "firebase-functions";
+import admin from 'firebase-admin';
+import { auth } from 'firebase-functions';
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
-export const makeUppercase = firestore.document('/messages/{documentId}')
-      .onCreate((snap, context) => {
-        const original = snap.data().original;
-        const uppercase = original.toUpperCase();
-        return snap.ref.set({uppercase}, {merge: true});
-      });
+
+export const createFirestoreUser = auth.user().onCreate((user) => {
+  console.log(user);
+  admin.firestore().collection('users').doc(user.uid).set({
+    email: user.email,
+  });
+});

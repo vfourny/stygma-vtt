@@ -22,7 +22,7 @@ const SignUp: React.FC = () => {
   const onSubmit = (data: SignUpFormType) =>
     signUp(data.email, data.password)
       .then(() => {
-        navigate('/verify');
+        navigate('../verify');
       })
       .catch((err) => {
         console.log(err.code);

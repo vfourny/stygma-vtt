@@ -6,7 +6,6 @@ const SecureRoute: React.FC = () => {
   const { user } = useSession();
 
   if (!user) return <Navigate to={RoutesCompletePath.SIGN_IN} />;
-  if (!user.emailVerified) return <Navigate to={RoutesCompletePath.VERIFY} />;
   return <Outlet />;
 };
 
