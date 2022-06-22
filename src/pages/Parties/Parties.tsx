@@ -34,7 +34,7 @@ const Parties: React.FC = () => {
       <button onClick={handleClick}>Déconnexion</button>
       <ul>
         {parties.map((party) => (
-          <li>
+          <li key={party.id}>
             <Link to={party.id}> {party.name}</Link>
           </li>
         ))}

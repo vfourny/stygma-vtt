@@ -2,6 +2,7 @@
 import { FirebaseOptions, initializeApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { getFunctions } from 'firebase/functions';
 import firebaseJSON from '../../firebase.json';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -20,6 +21,7 @@ const firebaseConfig: FirebaseOptions = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
+export const functions = getFunctions();
 
 // Use Emulators
 connectAuthEmulator(auth, `http://localhost:${firebaseJSON.emulators.auth.port}`);

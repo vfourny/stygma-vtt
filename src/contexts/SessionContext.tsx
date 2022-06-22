@@ -8,8 +8,9 @@ import {
   User,
   UserCredential,
 } from 'firebase/auth';
+import { httpsCallable } from 'firebase/functions';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../config/firebase';
+import { auth, functions } from '../config/firebase';
 
 type SessionContextType = {
   user: User | null;
@@ -46,7 +47,10 @@ export function SessionProvider(props: SessionProviderProps) {
   const signUp = async (email: string, password: string) => {
     try {
       setIsLoadingUser(true);
-      return await createUserWithEmailAndPassword(auth, email, password);
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      const createFirestoreUser = httpsCallable(functions, 'createFirestoreUser');
+      createFirestoreUser({ email });
+      return user;
     } catch (error: any) {
       setIsLoadingUser(false);
       throw error;
